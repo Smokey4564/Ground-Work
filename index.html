@@ -6,19 +6,19 @@
     <title>Two as One: Faith & Journey Companion</title>
     <style>
         :root {
-            /* Coastal Ocean & Warm Tan Palette */
-            --bg-color: #f7f9fa;
+            /* Deeper Ocean & Warm Sand Palette (Option 1) */
+            --bg-color: #f4efe9;
             --card-bg: #ffffff;
-            --text-main: #2c3e50;
-            --primary-ocean: #4a90e2;
-            --ocean-dark: #1f3a52;
-            --ocean-light: #eef6f8;
-            --sandy-tan: #f4ece1;
-            --sandy-border: #e0d4c3;
-            --peace-green: #5b8266;
-            --peace-bg: #f0f7f2;
-            --gold-accent: #d4a373;
-            --border: #e2e8f0;
+            --text-main: #1c2d3d;
+            --primary-ocean: #1b4965;
+            --ocean-light: #e0f2fe;
+            --sand-card: #f9f6f0;
+            --sand-border: #d8c8b8;
+            --peace-green: #386641;
+            --peace-bg: #e8f5e9;
+            --gold-accent: #bc6c25;
+            --border: #d0d7de;
+            --tag-private: #6c757d;
         }
 
         body {
@@ -36,25 +36,38 @@
 
         header {
             text-align: center;
-            margin-bottom: 20px;
-            padding: 15px;
-            background: linear-gradient(135deg, var(--ocean-dark), var(--primary-ocean));
+            margin-bottom: 15px;
+            padding: 18px;
+            background: linear-gradient(135deg, #0f2537, var(--primary-ocean));
             color: white;
             border-radius: 16px;
-            box-shadow: 0 4px 12px rgba(31, 58, 82, 0.15);
+            box-shadow: 0 4px 14px rgba(15, 37, 55, 0.25);
         }
 
-        header h1 {
-            margin: 0;
-            font-size: 1.8rem;
-            letter-spacing: 0.5px;
+        header h1 { margin: 0; font-size: 1.8rem; letter-spacing: 0.5px; }
+        header p { margin: 5px 0 12px 0; font-size: 0.88rem; opacity: 0.9; font-style: italic; }
+
+        /* Profile Bar */
+        .profile-bar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
         }
 
-        header p {
-            margin: 5px 0 0 0;
-            font-size: 0.9rem;
-            opacity: 0.9;
-            font-style: italic;
+        .profile-bar select {
+            width: auto;
+            padding: 4px 10px;
+            border-radius: 12px;
+            border: none;
+            font-weight: bold;
+            color: var(--primary-ocean);
+            background: white;
+            cursor: pointer;
         }
 
         .nav-tabs {
@@ -101,10 +114,12 @@
             box-shadow: 0 2px 8px rgba(0,0,0,0.03);
         }
 
-        /* Scripture & Tan Accent Banner */
         .verse-card {
-            background: var(--sandy-tan);
+            background: var(--sand-card);
             border-left: 5px solid var(--gold-accent);
+            border-right: 1px solid var(--sand-border);
+            border-top: 1px solid var(--sand-border);
+            border-bottom: 1px solid var(--sand-border);
             padding: 18px;
             border-radius: 12px;
             margin-bottom: 20px;
@@ -114,7 +129,7 @@
             margin: 0;
             font-size: 1.05rem;
             font-style: italic;
-            color: #4a3e31;
+            color: #3d3124;
             line-height: 1.5;
         }
 
@@ -122,11 +137,10 @@
             margin-top: 8px;
             font-weight: bold;
             font-size: 0.85rem;
-            color: var(--ocean-dark);
+            color: var(--gold-accent);
             text-align: right;
         }
 
-        /* Check-in Grid */
         .checkin-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -143,19 +157,18 @@
             text-align: center;
             font-weight: bold;
             font-size: 0.9rem;
-            color: var(--ocean-dark);
+            color: var(--primary-ocean);
             transition: all 0.2s;
         }
 
         .checkin-btn.checked {
-            background: #e1f5fe;
-            border-color: var(--primary-ocean);
-            color: var(--primary-ocean);
+            background: #d1e7dd;
+            border-color: var(--peace-green);
+            color: var(--peace-green);
         }
 
-        /* Form elements */
         .form-group { margin-bottom: 14px; }
-        label { display: block; margin-bottom: 6px; font-size: 0.85rem; font-weight: 600; color: var(--ocean-dark); }
+        label { display: block; margin-bottom: 6px; font-size: 0.85rem; font-weight: 600; color: var(--primary-ocean); }
         input, select, textarea {
             width: 100%;
             padding: 12px;
@@ -181,17 +194,9 @@
         }
 
         button.btn-submit:hover { opacity: 0.9; }
+        button.btn-peace { background-color: var(--peace-green); }
+        button.btn-tan { background-color: var(--gold-accent); color: white; }
 
-        button.btn-peace {
-            background-color: var(--peace-green);
-        }
-
-        button.btn-tan {
-            background-color: var(--gold-accent);
-            color: white;
-        }
-
-        /* Feed Cards */
         .feed-item {
             background: var(--card-bg);
             border: 1px solid var(--border);
@@ -204,35 +209,35 @@
             display: flex;
             justify-content: space-between;
             font-size: 0.8rem;
-            color: #7f8c8d;
+            color: #6c757d;
             margin-bottom: 8px;
         }
 
-        .author-tag {
-            font-weight: bold;
-            color: var(--primary-ocean);
-        }
+        .author-tag { font-weight: bold; color: var(--primary-ocean); }
+        .peace-card { background: var(--peace-bg); border: 1px solid #c2d6c7; }
+        .peace-card .author-tag { color: var(--peace-green); }
 
-        .peace-card {
-            background: var(--peace-bg);
-            border: 1px solid #c2d6c7;
-        }
-
-        .peace-card .author-tag {
-            color: var(--peace-green);
-        }
-
-        .date-box {
-            background: var(--sandy-tan);
-            border: 1px solid var(--sandy-border);
+        .content-box {
+            background: var(--sand-card);
+            border: 1px solid var(--sand-border);
             padding: 15px;
             border-radius: 10px;
-            text-align: center;
-            margin-top: 15px;
+            margin-top: 12px;
         }
 
-        .date-box h4 { margin: 0 0 5px 0; color: var(--ocean-dark); }
-        .date-box p { margin: 0; font-size: 0.95rem; color: #5a4b3c; }
+        .content-box h4 { margin: 0 0 6px 0; color: var(--primary-ocean); }
+        .content-box p { margin: 0; font-size: 0.92rem; color: #4a3e31; line-height: 1.4; }
+
+        .pill-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            background: var(--ocean-light);
+            color: var(--primary-ocean);
+            margin-bottom: 6px;
+        }
     </style>
 </head>
 <body>
@@ -241,17 +246,24 @@
     <header>
         <h1>🌊 Two as One</h1>
         <p>Our Shared Co-Op Journey, Faith & Connection</p>
+        <div class="profile-bar">
+            <span>👤 Active User:</span>
+            <select id="user-selector" onchange="changeUser()">
+                <option value="Partner A">Partner A</option>
+                <option value="Brianna">Brianna</option>
+            </select>
+        </div>
     </header>
 
     <div class="nav-tabs">
         <button class="tab-btn active" onclick="switchTab('hearth')">📖 The Hearth</button>
         <button class="tab-btn peace-tab" onclick="switchTab('peace')">🕊️ Peace Table</button>
         <button class="tab-btn" onclick="switchTab('dates')">🎲 Dates & Study</button>
-        <button class="tab-btn" onclick="switchTab('journal')">💌 Letters</button>
+        <button class="tab-btn" onclick="switchTab('journal')">💌 Letters & Vault</button>
         <button class="tab-btn" onclick="switchTab('cheatsheet')">💡 Understanding Us</button>
     </div>
 
-    <!-- TAB 1: THE HEARTH (Devotional & Streaks) -->
+    <!-- TAB 1: THE HEARTH -->
     <div id="hearth" class="page active">
         <div class="verse-card">
             <blockquote id="daily-verse-text">"Above all, keep loving one another earnestly, since love covers a multitude of sins."</blockquote>
@@ -263,45 +275,63 @@
             <p style="font-size: 0.85rem; color:#666;">Check in together each day after reading, praying, or spending quality time together!</p>
             
             <div class="checkin-grid">
-                <button class="checkin-btn" id="btn-checkin-partner1" onclick="toggleCheckin('p1')">
-                    👤 Partner 1 Check-In
+                <button class="checkin-btn" id="btn-checkin-p1" onclick="toggleCheckin('p1')">
+                    👤 Partner A Check-In
                 </button>
-                <button class="checkin-btn" id="btn-checkin-partner2" onclick="toggleCheckin('p2')">
-                    👤 Partner 2 Check-In
+                <button class="checkin-btn" id="btn-checkin-p2" onclick="toggleCheckin('p2')">
+                    👤 Brianna Check-In
                 </button>
             </div>
         </div>
 
+        <!-- Daily Suite Generator -->
         <div class="panel">
-            <h3>🙏 Today's Shared Prayer Target</h3>
+            <h3>📖 Daily Content & Practice Generator</h3>
             <div class="form-group">
-                <input type="text" id="prayer-target-input" placeholder="What are we lifting up in prayer today?">
+                <select id="hearth-content-type">
+                    <option value="guided-prayer">🙏 2-Minute Guided Prayer Prompt</option>
+                    <option value="quality-time">⏱️ Micro Quality Time Exercise</option>
+                    <option value="scripture-reflection">✝️ Scripture Deep Dive</option>
+                </select>
             </div>
-            <button class="btn-submit" onclick="savePrayerTarget()">Save Prayer Focus</button>
-            <p id="current-prayer-display" style="margin-top: 15px; font-style: italic; color: #555;"></p>
+            <button class="btn-submit btn-tan" onclick="generateHearthContent()">Generate Practice</button>
+
+            <div id="hearth-content-display" class="content-box" style="display:none;">
+                <span id="hearth-badge" class="pill-badge">Practice</span>
+                <h4 id="hearth-title">Focus Title</h4>
+                <p id="hearth-desc">Content text here...</p>
+            </div>
+        </div>
+
+        <!-- Shared Prayer Target Log -->
+        <div class="panel">
+            <h3>🙏 Shared Prayer Wall</h3>
+            <div class="form-group">
+                <input type="text" id="prayer-target-input" placeholder="What are we lifting up in prayer right now?">
+            </div>
+            <button class="btn-submit" onclick="savePrayerTarget()">Post Shared Prayer Focus</button>
+            
+            <h4 style="margin-top:20px; color:var(--primary-ocean);">Active Prayer Focuses</h4>
+            <div id="prayer-history-list"></div>
         </div>
     </div>
 
-    <!-- TAB 2: THE PEACE TABLE (Conflict Resolution Suite) -->
+    <!-- TAB 2: THE PEACE TABLE -->
     <div id="peace" class="page">
         <div class="panel" style="background: var(--peace-bg); border-color: #c2d6c7;">
             <h2 style="color: var(--peace-green); margin-top:0;">🕊️ The Peace Table</h2>
-            <p style="font-size: 0.85rem; color: #4a6350; line-height: 1.4;">
+            <p style="font-size: 0.85rem; color: #386641; line-height: 1.4;">
                 A calm, safe space to process feelings, step back during disagreements, and extend grace before finding words out loud.
             </p>
             
             <div style="background: white; padding: 12px; border-radius: 8px; font-size: 0.85rem; color: #333; margin-top: 10px;">
-                <strong>💡 Quick Pause Prompt:</strong> "Be quick to listen, slow to speak, and slow to become angry." — <em>James 1:19</em>
+                <strong>💡 Grace Prompt:</strong> "Be quick to listen, slow to speak, and slow to become angry." — <em>James 1:19</em>
             </div>
         </div>
 
         <div class="panel">
             <h3>🕊️ Express What's on Your Heart</h3>
             <form id="peace-form">
-                <div class="form-group">
-                    <label>Written By:</label>
-                    <input type="text" id="peace-author" placeholder="Your Name" required>
-                </div>
                 <div class="form-group">
                     <label>💙 What happened from my perspective...</label>
                     <textarea id="peace-perspective" rows="2" placeholder="Help me understand what went down..." required></textarea>
@@ -322,11 +352,11 @@
         <div id="peace-feed"></div>
     </div>
 
-    <!-- TAB 3: DATES & WEEKLY STUDY (NEW!) -->
+    <!-- TAB 3: DATES & STUDY -->
     <div id="dates" class="page">
         <div class="panel">
-            <h3>🎲 Date Night Idea Generator</h3>
-            <p style="font-size:0.85rem; color:#666;">Need inspiration for quality time together? Pick a category and spin!</p>
+            <h3>🎲 True-Random Date Night Spinner</h3>
+            <p style="font-size:0.85rem; color:#666;">Spins a truly random date idea from our curated list!</p>
             
             <div class="form-group">
                 <select id="date-category">
@@ -335,72 +365,89 @@
                     <option value="quick">⚡ 15-Minute Micro Date</option>
                 </select>
             </div>
-            <button class="btn-submit btn-tan" onclick="generateDateIdea()">🎲 Spin Date Night Idea</button>
+            <button class="btn-submit btn-tan" onclick="generateDateIdea()">🎲 Spin Random Date Idea</button>
 
-            <div id="date-display" class="date-box" style="display:none;">
+            <div id="date-display" class="content-box" style="display:none;">
                 <h4 id="date-title">Date Idea</h4>
                 <p id="date-desc">Click spin to reveal an idea!</p>
             </div>
         </div>
 
+        <!-- 3-Pillar Study Engine -->
         <div class="panel">
-            <h3>📚 Weekly Focus & Devotional Topic</h3>
-            <div style="background: var(--ocean-light); padding: 15px; border-radius: 10px; border-left: 4px solid var(--primary-ocean);">
-                <h4 style="margin:0 0 5px 0; color: var(--ocean-dark);">This Week's Focus: "Building Patience in Small Moments"</h4>
-                <p style="margin: 0 0 10px 0; font-size: 0.9rem; color: #444;">
-                    <strong>Reflection Prompt:</strong> What is one small daily trigger that stresses you out, and how can we support each other when that happens?
-                </p>
-                <p style="margin:0; font-size:0.85rem; color: var(--primary-ocean); font-weight:bold;">
-                    📖 Key Verse: Colossians 3:12 — "Clothe yourselves with compassion, kindness, humility, gentleness, and patience."
-                </p>
+            <h3>📚 3-Pillar Growth & Study Engine</h3>
+            <div class="form-group">
+                <label>Select Growth Track:</label>
+                <select id="study-track" onchange="renderStudyTopic()">
+                    <option value="faith">✝️ Faith & Spiritual Walk</option>
+                    <option value="relationship">❤️ Relationship & Communication</option>
+                    <option value="personal">🌱 Personal Growth & Self-Work</option>
+                </select>
+            </div>
+
+            <div id="study-topic-display" class="content-box">
+                <span id="study-badge" class="pill-badge">Faith Track</span>
+                <h4 id="study-title">Loading Focus...</h4>
+                <p id="study-prompt" style="margin-bottom:10px;">Prompt content...</p>
+                <p id="study-verse" style="font-weight:bold; font-size:0.85rem; color:var(--primary-ocean);"></p>
             </div>
         </div>
     </div>
 
-    <!-- TAB 4: LETTERS & JOURNAL -->
+    <!-- TAB 4: LETTERS & VAULT -->
     <div id="journal" class="page">
         <div class="panel">
-            <h3>💌 Write an Encouragement Letter or Note</h3>
+            <h3>💌 Letters, Notes & Private Journal</h3>
             <form id="journal-form">
-                <div class="form-group" style="display:flex; gap:10px;">
-                    <input type="text" id="journal-author" placeholder="Your Name" style="flex:1;" required>
-                    <select id="journal-type" style="flex:1;">
+                <div class="form-group">
+                    <label>Entry Type:</label>
+                    <select id="journal-type">
                         <option value="Open Encouragement 💌">Open Encouragement 💌</option>
-                        <option value="Gratitude Note 🌟">Gratitude Note 🌟</option>
-                        <option value="Private Reflection 🔒">Private Reflection 🔒</option>
+                        <option value="Gratitude & Appreciation 🌟">Gratitude & Appreciation 🌟</option>
+                        <option value="Shout-Out / Celebration 👏">Shout-Out / Celebration 👏</option>
+                        <option value="Gentle Growth Reflection 🪞">Gentle Growth Reflection 🪞 ("Something to reflect on")</option>
+                        <option value="Private Journal Entry 🔒">Private Journal Entry 🔒 (Visible to author only)</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <textarea id="journal-text" rows="3" placeholder="Write your letter or reflection here..." required></textarea>
+                    <textarea id="journal-text" rows="3" placeholder="Write your letter, reflection, or note here..." required></textarea>
                 </div>
                 <button type="submit" class="btn-submit">Post Entry</button>
             </form>
         </div>
 
-        <h3>📖 Recent Letters & Notes</h3>
+        <h3>📖 Recent Letters & Journal Entries</h3>
         <div id="journal-feed"></div>
     </div>
 
-    <!-- TAB 5: UNDERSTANDING US (Cheat Sheet) -->
+    <!-- TAB 5: UNDERSTANDING US -->
     <div id="cheatsheet" class="page">
         <div class="panel">
-            <h3>💡 Love Languages & Stress Blueprint</h3>
-            <p style="font-size:0.85rem; color:#666;">Use this living reference sheet to better understand how to love each other when stressed or tired.</p>
+            <h3>💡 Expanded Connection Blueprint</h3>
+            <p style="font-size:0.85rem; color:#666;">Fill out your preferences to serve as a living cheat sheet for each other!</p>
             
             <form id="blueprint-form">
                 <div class="form-group">
-                    <label>Name:</label>
-                    <input type="text" id="bp-name" placeholder="Your Name" required>
+                    <label>Primary Love Language:</label>
+                    <input type="text" id="bp-love" placeholder="e.g. Quality Time, Words of Affirmation" required>
                 </div>
                 <div class="form-group">
-                    <label>Primary Love Language:</label>
-                    <input type="text" id="bp-love" placeholder="e.g. Quality Time, Words of Affirmation">
+                    <label>Apology Language (How you best receive an apology):</label>
+                    <input type="text" id="bp-apology" placeholder="e.g. Changed behavior, Sincere 'I'm sorry', Verbal acknowledgement" required>
                 </div>
                 <div class="form-group">
                     <label>When I'm feeling stressed, the best way to help me is...</label>
-                    <input type="text" id="bp-stress" placeholder="e.g. Give me 15 mins of quiet, or give me a hug">
+                    <input type="text" id="bp-stress" placeholder="e.g. Give me 15 mins of quiet, or give me a hug" required>
                 </div>
-                <button type="submit" class="btn-submit">Save Blueprint</button>
+                <div class="form-group">
+                    <label>My 'Overwhelm' Warning Signal (How to tell I'm overwhelmed):</label>
+                    <input type="text" id="bp-signal" placeholder="e.g. I go quiet, I move fast, I get overly cautious" required>
+                </div>
+                <div class="form-group">
+                    <label>Small Pick-Me-Up Gesture that always brightens my day:</label>
+                    <input type="text" id="bp-pickup" placeholder="e.g. Bring me a coffee, send a sweet text out of nowhere" required>
+                </div>
+                <button type="submit" class="btn-submit">Save My Blueprint</button>
             </form>
         </div>
 
@@ -410,38 +457,78 @@
 </div>
 
 <script>
-    // State Architecture
-    let state = JSON.parse(localStorage.getItem('twoAsOneData')) || {
+    // Initial State Architecture
+    let state = JSON.parse(localStorage.getItem('twoAsOneData_v2')) || {
+        activeUser: 'Partner A',
         p1Checked: false,
         p2Checked: false,
         streak: 0,
-        prayerTarget: '',
+        prayers: [],
         peaceEntries: [],
         journalEntries: [],
-        blueprints: []
+        blueprints: {}
+    };
+
+    const hearthContent = {
+        'guided-prayer': [
+            { title: "2-Minute Peace & Union Prayer", desc: "Hold hands, take 3 deep breaths together, and pray: 'Lord, grant us quick ears to listen, soft hearts to forgive, and steady hands to serve each other today. Amen.'" },
+            { title: "2-Minute Gratitude Prayer", desc: "Take turns thanking God out loud for 2 specific qualities you admire in your partner today." }
+        ],
+        'quality-time': [
+            { title: "5-Minute Phone-Free Eye Contact Talk", desc: "Sit face-to-face, set a timer for 5 minutes, put phones in another room, and ask: 'What made you feel most supported this week?'" },
+            { title: "The 3-Minute Reset Hug", desc: "Stand together and embrace in a calm hug for 60 uninterrupted seconds without speaking." }
+        ],
+        'scripture-reflection': [
+            { title: "Colossians 3:13 Reflection", desc: "'Bear with each other and forgive one another if any of you has a grievance against someone. Forgive as the Lord forgave you.' — How can we practice proactive grace today?" }
+        ]
     };
 
     const dateIdeas = {
         cozy: [
-            { title: "🎬 The Movie Critic Night", desc: "Pick a film neither of you has seen, make homemade popcorn, and write a funny joint review after." },
-            { title: "🧩 Board Game & Dessert", desc: "Clear the table, grab a favorite board or card game, and bake or order a quick sweet treat." },
-            { title: "🕯️ Porch Talks & Prayer", desc: "Turn off all phone notifications, sit outside with tea/coffee, and talk with zero screen distractions." }
+            { title: "🎬 The Movie Critic Night", desc: "Pick a movie neither of you has seen, make homemade popcorn, and write a joint 1-10 rating review after." },
+            { title: "🧩 Board Game & Dessert", desc: "Clear the table, grab a favorite board or card game, and enjoy a sweet treat." },
+            { title: "🕯️ Porch Talks & Tea", desc: "Turn off phone notifications, sit outside with hot tea/coffee, and talk with zero screens." },
+            { title: "🍳 Surprise Dessert Cook-Off", desc: "Find a simple 4-ingredient dessert recipe online and make it together from scratch!" }
         ],
         adventure: [
-            { title: "🌅 Sunset Drive & Dessert", desc: "Drive to a scenic spot nearby right before sunset and grab dessert on the way back." },
+            { title: "🌅 Sunset Drive & Dessert", desc: "Drive to a scenic view nearby right before sunset and grab dessert on the way home." },
             { title: "🛒 The $10 Grocery Challenge", desc: "Go to the grocery store, give each other $10 and 10 minutes to buy surprise snacks for each other!" },
-            { title: "🍦 New Ice Cream Hunt", desc: "Find a local ice cream or coffee shop you've never tried before and order something new." }
+            { title: "🍦 New Local Spot Hunt", desc: "Find a local ice cream or coffee shop you've never tried before and order something new." },
+            { title: "🧺 Park Bench Picnic", desc: "Grab takeout sandwiches and sit at a park bench you've never visited together." }
         ],
         quick: [
             { title: "☕ 15-Minute Morning Coffee Date", desc: "Sit together for 15 solid minutes before starting the day—no phone scrolling allowed!" },
-            { title: "🎵 Song Exchange", desc: "Play 3 songs for each other that reminded you of each other or cheered you up this week." },
+            { title: "🎵 3-Song Exchange", desc: "Play 3 songs for each other that reminded you of each other or cheered you up this week." },
             { title: "🙏 3-Minute Sunset Prayer", desc: "Pause together at the end of the day, hold hands, and speak 1 thing you're grateful for." }
         ]
     };
 
+    const studyTracks = {
+        faith: {
+            title: "Spiritual Unity & Prayer Habits",
+            prompt: "How can we build a consistent 2-minute daily prayer habit together without making it feel like a chore?",
+            verse: "Ecclesiastes 4:12 — 'A cord of three strands is not quickly broken.'"
+        },
+        relationship: {
+            title: "Active Listening & Grace Under Stress",
+            prompt: "When you are feeling stressed or tired, what is the #1 signal that tells me you need support rather than advice?",
+            verse: "James 1:19 — 'Be quick to listen, slow to speak, and slow to become angry.'"
+        },
+        personal: {
+            title: "Personal Emotional Regulation & Character",
+            prompt: "What is one personal goal or habit you are working on individually right now that I can pray for and encourage?",
+            verse: "Proverbs 4:23 — 'Above all else, guard your heart, for everything you do flows from it.'"
+        }
+    };
+
     function saveState() {
-        localStorage.setItem('twoAsOneData', JSON.stringify(state));
+        localStorage.setItem('twoAsOneData_v2', JSON.stringify(state));
         updateUI();
+    }
+
+    function changeUser() {
+        state.activeUser = document.getElementById('user-selector').value;
+        saveState();
     }
 
     function switchTab(tabId) {
@@ -451,7 +538,6 @@
         if(window.event) window.event.currentTarget.classList.add('active');
     }
 
-    // Check-in & Streak System
     function toggleCheckin(partner) {
         if (partner === 'p1') state.p1Checked = !state.p1Checked;
         if (partner === 'p2') state.p2Checked = !state.p2Checked;
@@ -460,31 +546,60 @@
             state.streak += 1;
             alert("🎉 Both partners checked in! Connection streak leveled up!");
         }
-
         saveState();
     }
 
     function savePrayerTarget() {
-        state.prayerTarget = document.getElementById('prayer-target-input').value;
+        const val = document.getElementById('prayer-target-input').value;
+        if(!val) return;
+        state.prayers.unshift({
+            text: val,
+            author: state.activeUser,
+            date: new Date().toLocaleDateString()
+        });
+        document.getElementById('prayer-target-input').value = '';
         saveState();
+    }
+
+    function generateHearthContent() {
+        const type = document.getElementById('hearth-content-type').value;
+        const list = hearthContent[type];
+        const item = list[Math.floor(Math.random() * list.length)];
+        
+        document.getElementById('hearth-badge').innerText = type.replace('-', ' ').toUpperCase();
+        document.getElementById('hearth-title').innerText = item.title;
+        document.getElementById('hearth-desc').innerText = item.desc;
+        document.getElementById('hearth-content-display').style.display = 'block';
     }
 
     function generateDateIdea() {
         const cat = document.getElementById('date-category').value;
         const list = dateIdeas[cat];
-        const randomIdea = list[Math.floor(Math.random() * list.length)];
+        // True random selection
+        const randomIdx = Math.floor(Math.random() * list.length);
+        const idea = list[randomIdx];
         
-        document.getElementById('date-title').innerText = randomIdea.title;
-        document.getElementById('date-desc').innerText = randomIdea.desc;
+        document.getElementById('date-title').innerText = idea.title;
+        document.getElementById('date-desc').innerText = idea.desc;
         document.getElementById('date-display').style.display = 'block';
     }
 
-    // Peace Form Submission
+    function renderStudyTopic() {
+        const trackKey = document.getElementById('study-track').value;
+        const track = studyTracks[trackKey];
+        
+        document.getElementById('study-badge').innerText = trackKey.toUpperCase() + " TRACK";
+        document.getElementById('study-title').innerText = track.title;
+        document.getElementById('study-prompt').innerText = "Reflection Prompt: " + track.prompt;
+        document.getElementById('study-verse').innerText = track.verse;
+    }
+
+    // Peace Form
     document.getElementById('peace-form').addEventListener('submit', function(e) {
         e.preventDefault();
         const entry = {
             date: new Date().toLocaleDateString() + " " + new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}),
-            author: document.getElementById('peace-author').value,
+            author: state.activeUser,
             perspective: document.getElementById('peace-perspective').value,
             feeling: document.getElementById('peace-feeling').value,
             need: document.getElementById('peace-need').value
@@ -494,12 +609,12 @@
         this.reset();
     });
 
-    // Journal Form Submission
+    // Journal Form
     document.getElementById('journal-form').addEventListener('submit', function(e) {
         e.preventDefault();
         const entry = {
             date: new Date().toLocaleDateString(),
-            author: document.getElementById('journal-author').value,
+            author: state.activeUser,
             type: document.getElementById('journal-type').value,
             text: document.getElementById('journal-text').value
         };
@@ -508,50 +623,62 @@
         this.reset();
     });
 
-    // Blueprint Form Submission
+    // Blueprint Form
     document.getElementById('blueprint-form').addEventListener('submit', function(e) {
         e.preventDefault();
         const bp = {
-            name: document.getElementById('bp-name').value,
             love: document.getElementById('bp-love').value,
-            stress: document.getElementById('bp-stress').value
+            apology: document.getElementById('bp-apology').value,
+            stress: document.getElementById('bp-stress').value,
+            signal: document.getElementById('bp-signal').value,
+            pickup: document.getElementById('bp-pickup').value
         };
-        
-        const existingIdx = state.blueprints.findIndex(b => b.name.toLowerCase() === bp.name.toLowerCase());
-        if (existingIdx >= 0) state.blueprints[existingIdx] = bp;
-        else state.blueprints.push(bp);
-
+        state.blueprints[state.activeUser] = bp;
         saveState();
         this.reset();
     });
 
-    // Render UI Elements
+    // Render Pipeline
     function updateUI() {
+        document.getElementById('user-selector').value = state.activeUser;
         document.getElementById('streak-count').innerText = `${state.streak} Days`;
         
-        const p1Btn = document.getElementById('btn-checkin-partner1');
-        const p2Btn = document.getElementById('btn-checkin-partner2');
+        // Check-in Buttons
+        const p1Btn = document.getElementById('btn-checkin-p1');
+        const p2Btn = document.getElementById('btn-checkin-p2');
         
         p1Btn.className = `checkin-btn ${state.p1Checked ? 'checked' : ''}`;
-        p1Btn.innerText = state.p1Checked ? "✅ Partner 1 Checked In" : "👤 Partner 1 Check-In";
+        p1Btn.innerText = state.p1Checked ? "✅ Partner A Checked In" : "👤 Partner A Check-In";
         
         p2Btn.className = `checkin-btn ${state.p2Checked ? 'checked' : ''}`;
-        p2Btn.innerText = state.p2Checked ? "✅ Partner 2 Checked In" : "👤 Partner 2 Check-In";
+        p2Btn.innerText = state.p2Checked ? "✅ Brianna Checked In" : "👤 Brianna Check-In";
 
-        document.getElementById('current-prayer-display').innerText = state.prayerTarget ? 
-            `" ${state.prayerTarget} "` : "No current focus logged. Add one above!";
+        // Render Prayers
+        const prayerList = document.getElementById('prayer-history-list');
+        prayerList.innerHTML = '';
+        if (state.prayers.length === 0) {
+            prayerList.innerHTML = `<p style="color:#888; font-size:0.85rem;">No active prayers logged. Add one above!</p>`;
+        } else {
+            state.prayers.forEach(p => {
+                prayerList.innerHTML += `
+                    <div class="content-box" style="margin-top:8px;">
+                        <span class="pill-badge">${p.author} • ${p.date}</span>
+                        <p style="margin:0; font-weight:500;">" ${p.text} "</p>
+                    </div>`;
+            });
+        }
 
-        // Peace Feed
+        // Render Peace Table
         const peaceFeed = document.getElementById('peace-feed');
         peaceFeed.innerHTML = '';
         if (state.peaceEntries.length === 0) {
-            peaceFeed.innerHTML = `<p style="color:#888; text-align:center;">No open peace entries. When you need to process feelings, submit a note above!</p>`;
+            peaceFeed.innerHTML = `<p style="color:#888; text-align:center;">No open peace entries.</p>`;
         } else {
             state.peaceEntries.forEach(p => {
                 peaceFeed.innerHTML += `
                     <div class="feed-item peace-card">
                         <div class="feed-header">
-                            <span class="author-tag">🕊️ ${p.author}</span>
+                            <span class="author-tag">🕊️ Posted by ${p.author}</span>
                             <span>${p.date}</span>
                         </div>
                         <p style="margin:4px 0;"><strong>💙 Perspective:</strong> ${p.perspective}</p>
@@ -561,15 +688,21 @@
             });
         }
 
-        // Journal Feed
+        // Render Journal Entries (Handling Private Entries)
         const journalFeed = document.getElementById('journal-feed');
         journalFeed.innerHTML = '';
         if (state.journalEntries.length === 0) {
-            journalFeed.innerHTML = `<p style="color:#888; text-align:center;">No letters logged yet. Write an encouraging note above!</p>`;
+            journalFeed.innerHTML = `<p style="color:#888; text-align:center;">No letters logged yet.</p>`;
         } else {
             state.journalEntries.forEach(j => {
+                const isPrivate = j.type.includes('Private');
+                if (isPrivate && j.author !== state.activeUser) {
+                    // Hide private notes belonging to the other partner
+                    return;
+                }
+                
                 journalFeed.innerHTML += `
-                    <div class="feed-item">
+                    <div class="feed-item" style="${isPrivate ? 'border-left:4px solid var(--tag-private);' : ''}">
                         <div class="feed-header">
                             <span class="author-tag">${j.author} (${j.type})</span>
                             <span>${j.date}</span>
@@ -579,24 +712,30 @@
             });
         }
 
-        // Blueprints
+        // Render Blueprints
         const bpList = document.getElementById('blueprint-list');
         bpList.innerHTML = '';
-        if (state.blueprints.length === 0) {
-            bpList.innerHTML = `<p style="color:#888; text-align:center;">No cheat sheets saved yet. Add your love languages above!</p>`;
+        const keys = Object.keys(state.blueprints);
+        if (keys.length === 0) {
+            bpList.innerHTML = `<p style="color:#888; text-align:center;">No cheat sheets saved yet.</p>`;
         } else {
-            state.blueprints.forEach(b => {
+            keys.forEach(name => {
+                const b = state.blueprints[name];
                 bpList.innerHTML += `
                     <div class="feed-item" style="border-left: 4px solid var(--primary-ocean);">
-                        <h4 style="margin:0 0 5px 0; color:var(--primary-ocean);">${b.name}'s Connection Cheat Sheet</h4>
-                        <p style="margin:3px 0; font-size:0.9rem;"><strong>❤️ Love Language:</strong> ${b.love}</p>
-                        <p style="margin:3px 0; font-size:0.9rem;"><strong>🧘 When Stressed:</strong> ${b.stress}</p>
+                        <h4 style="margin:0 0 6px 0; color:var(--primary-ocean);">${name}'s Connection Cheat Sheet</h4>
+                        <p style="margin:3px 0; font-size:0.88rem;"><strong>❤️ Love Language:</strong> ${b.love}</p>
+                        <p style="margin:3px 0; font-size:0.88rem;"><strong>🕊️ Apology Language:</strong> ${b.apology}</p>
+                        <p style="margin:3px 0; font-size:0.88rem;"><strong>🧘 When Stressed:</strong> ${b.stress}</p>
+                        <p style="margin:3px 0; font-size:0.88rem;"><strong>⚠️ Overwhelm Signal:</strong> ${b.signal}</p>
+                        <p style="margin:3px 0; font-size:0.88rem;"><strong>🎁 Pick-Me-Up Gesture:</strong> ${b.pickup}</p>
                     </div>`;
             });
         }
-    } 
+    }
 
-    // Initial Load
+    // Init
+    renderStudyTopic();
     updateUI();
 </script>
 </body>
