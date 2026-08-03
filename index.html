@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Two as One: Faith & Journey Companion</title>
+    <style>
+        :root {
+            /* Coastal Ocean & Warm Tan Palette */
+            --bg-color: #f7f9fa;
+            --card-bg: #ffffff;
+            --text-main: #2c3e50;
+            --primary-ocean: #4a90e2;
+            --ocean-dark: #1f3a52;
+            --ocean-light: #eef6f8;
+            --sandy-tan: #f4ece1;
+            --sandy-border: #e0d4c3;
+            --peace-green: #5b8266;
+            --peace-bg: #f0f7f2;
+            --gold-accent: #d4a373;
+            --border: #e2e8f0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Georgia, serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 15px;
+        }
+
+        .container {
+            max-width: 750px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: linear-gradient(135deg, var(--ocean-dark), var(--primary-ocean));
+            color: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(31, 58, 82, 0.15);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 1.8rem;
+            letter-spacing: 0.5px;
+        }
+
+        header p {
+            margin: 5px 0 0 0;
+            font-size: 0.9rem;
+            opacity: 0.9;
+            font-style: italic;
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 20px;
+            overflow-x: auto;
+            padding-bottom: 5px;
+        }
+
+        .tab-btn {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            padding: 10px 14px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: var(--text-main);
+            white-space: nowrap;
+            transition: all 0.2s ease;
+        }
+
+        .tab-btn.active {
+            background-color: var(--primary-ocean);
+            color: white;
+            border-color: var(--primary-ocean);
+        }
+
+        .tab-btn.peace-tab.active {
+            background-color: var(--peace-green);
+            border-color: var(--peace-green);
+        }
+
+        .page { display: none; }
+        .page.active { display: block; }
+
+        .panel {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 14px;
+            border: 1px solid var(--border);
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+        }
+
+        /* Scripture & Tan Accent Banner */
+        .verse-card {
+            background: var(--sandy-tan);
+            border-left: 5px solid var(--gold-accent);
+            padding: 18px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+
+        .verse-card blockquote {
+            margin: 0;
+            font-size: 1.05rem;
+            font-style: italic;
+            color: #4a3e31;
+            line-height: 1.5;
+        }
+
+        .verse-card .verse-ref {
+            margin-top: 8px;
+            font-weight: bold;
+            font-size: 0.85rem;
+            color: var(--ocean-dark);
+            text-align: right;
+        }
+
+        /* Check-in Grid */
+        .checkin-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 15px;
+        }
+
+        .checkin-btn {
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            background: var(--ocean-light);
+            cursor: pointer;
+            text-align: center;
+            font-weight: bold;
+            font-size: 0.9rem;
+            color: var(--ocean-dark);
+            transition: all 0.2s;
+        }
+
+        .checkin-btn.checked {
+            background: #e1f5fe;
+            border-color: var(--primary-ocean);
+            color: var(--primary-ocean);
+        }
+
+        /* Form elements */
+        .form-group { margin-bottom: 14px; }
+        label { display: block; margin-bottom: 6px; font-size: 0.85rem; font-weight: 600; color: var(--ocean-dark); }
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 0.95rem;
+            font-family: inherit;
+            background: #fafafa;
+        }
+
+        button.btn-submit {
+            width: 100%;
+            background-color: var(--primary-ocean);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: opacity 0.2s;
+        }
+
+        button.btn-submit:hover { opacity: 0.9; }
+
+        button.btn-peace {
+            background-color: var(--peace-green);
+        }
+
+        button.btn-tan {
+            background-color: var(--gold-accent);
+            color: white;
+        }
+
+        /* Feed Cards */
+        .feed-item {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 12px;
+        }
+
+        .feed-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            color: #7f8c8d;
+            margin-bottom: 8px;
+        }
+
+        .author-tag {
+            font-weight: bold;
+            color: var(--primary-ocean);
+        }
+
+        .peace-card {
+            background: var(--peace-bg);
+            border: 1px solid #c2d6c7;
+        }
+
+        .peace-card .author-tag {
+            color: var(--peace-green);
+        }
+
+        .date-box {
+            background: var(--sandy-tan);
+            border: 1px solid var(--sandy-border);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .date-box h4 { margin: 0 0 5px 0; color: var(--ocean-dark); }
+        .date-box p { margin: 0; font-size: 0.95rem; color: #5a4b3c; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>🌊 Two as One</h1>
+        <p>Our Shared Co-Op Journey, Faith & Connection</p>
+    </header>
+
+    <div class="nav-tabs">
+        <button class="tab-btn active" onclick="switchTab('hearth')">📖 The Hearth</button>
+        <button class="tab-btn peace-tab" onclick="switchTab('peace')">🕊️ Peace Table</button>
+        <button class="tab-btn" onclick="switchTab('dates')">🎲 Dates & Study</button>
+        <button class="tab-btn" onclick="switchTab('journal')">💌 Letters</button>
+        <button class="tab-btn" onclick="switchTab('cheatsheet')">💡 Understanding Us</button>
+    </div>
+
+    <!-- TAB 1: THE HEARTH (Devotional & Streaks) -->
+    <div id="hearth" class="page active">
+        <div class="verse-card">
+            <blockquote id="daily-verse-text">"Above all, keep loving one another earnestly, since love covers a multitude of sins."</blockquote>
+            <div class="verse-ref" id="daily-verse-ref">1 Peter 4:8</div>
+        </div>
+
+        <div class="panel">
+            <h3>🔥 Daily Connection Streak: <span id="streak-count" style="color:var(--gold-accent);">0 Days</span></h3>
+            <p style="font-size: 0.85rem; color:#666;">Check in together each day after reading, praying, or spending quality time together!</p>
+            
+            <div class="checkin-grid">
+                <button class="checkin-btn" id="btn-checkin-partner1" onclick="toggleCheckin('p1')">
+                    👤 Partner 1 Check-In
+                </button>
+                <button class="checkin-btn" id="btn-checkin-partner2" onclick="toggleCheckin('p2')">
+                    👤 Partner 2 Check-In
+                </button>
+            </div>
+        </div>
+
+        <div class="panel">
+            <h3>🙏 Today's Shared Prayer Target</h3>
+            <div class="form-group">
+                <input type="text" id="prayer-target-input" placeholder="What are we lifting up in prayer today?">
+            </div>
+            <button class="btn-submit" onclick="savePrayerTarget()">Save Prayer Focus</button>
+            <p id="current-prayer-display" style="margin-top: 15px; font-style: italic; color: #555;"></p>
+        </div>
+    </div>
+
+    <!-- TAB 2: THE PEACE TABLE (Conflict Resolution Suite) -->
+    <div id="peace" class="page">
+        <div class="panel" style="background: var(--peace-bg); border-color: #c2d6c7;">
+            <h2 style="color: var(--peace-green); margin-top:0;">🕊️ The Peace Table</h2>
+            <p style="font-size: 0.85rem; color: #4a6350; line-height: 1.4;">
+                A calm, safe space to process feelings, step back during disagreements, and extend grace before finding words out loud.
+            </p>
+            
+            <div style="background: white; padding: 12px; border-radius: 8px; font-size: 0.85rem; color: #333; margin-top: 10px;">
+                <strong>💡 Quick Pause Prompt:</strong> "Be quick to listen, slow to speak, and slow to become angry." — <em>James 1:19</em>
+            </div>
+        </div>
+
+        <div class="panel">
+            <h3>🕊️ Express What's on Your Heart</h3>
+            <form id="peace-form">
+                <div class="form-group">
+                    <label>Written By:</label>
+                    <input type="text" id="peace-author" placeholder="Your Name" required>
+                </div>
+                <div class="form-group">
+                    <label>💙 What happened from my perspective...</label>
+                    <textarea id="peace-perspective" rows="2" placeholder="Help me understand what went down..." required></textarea>
+                </div>
+                <div class="form-group">
+                    <label>💔 How it made me feel...</label>
+                    <textarea id="peace-feeling" rows="2" placeholder="I felt hurt, misunderstood, overwhelmed..." required></textarea>
+                </div>
+                <div class="form-group">
+                    <label>🙏 What I need right now to feel supported or heard...</label>
+                    <textarea id="peace-need" rows="2" placeholder="A quiet hug, 10 minutes to cool off, a calm conversation..." required></textarea>
+                </div>
+                <button type="submit" class="btn-submit btn-peace">Post to The Peace Table</button>
+            </form>
+        </div>
+
+        <h3>🕊️ Open Peace Entries</h3>
+        <div id="peace-feed"></div>
+    </div>
+
+    <!-- TAB 3: DATES & WEEKLY STUDY (NEW!) -->
+    <div id="dates" class="page">
+        <div class="panel">
+            <h3>🎲 Date Night Idea Generator</h3>
+            <p style="font-size:0.85rem; color:#666;">Need inspiration for quality time together? Pick a category and spin!</p>
+            
+            <div class="form-group">
+                <select id="date-category">
+                    <option value="cozy">🏡 Cozy & Free At-Home</option>
+                    <option value="adventure">🚗 Out & About Adventure</option>
+                    <option value="quick">⚡ 15-Minute Micro Date</option>
+                </select>
+            </div>
+            <button class="btn-submit btn-tan" onclick="generateDateIdea()">🎲 Spin Date Night Idea</button>
+
+            <div id="date-display" class="date-box" style="display:none;">
+                <h4 id="date-title">Date Idea</h4>
+                <p id="date-desc">Click spin to reveal an idea!</p>
+            </div>
+        </div>
+
+        <div class="panel">
+            <h3>📚 Weekly Focus & Devotional Topic</h3>
+            <div style="background: var(--ocean-light); padding: 15px; border-radius: 10px; border-left: 4px solid var(--primary-ocean);">
+                <h4 style="margin:0 0 5px 0; color: var(--ocean-dark);">This Week's Focus: "Building Patience in Small Moments"</h4>
+                <p style="margin: 0 0 10px 0; font-size: 0.9rem; color: #444;">
+                    <strong>Reflection Prompt:</strong> What is one small daily trigger that stresses you out, and how can we support each other when that happens?
+                </p>
+                <p style="margin:0; font-size:0.85rem; color: var(--primary-ocean); font-weight:bold;">
+                    📖 Key Verse: Colossians 3:12 — "Clothe yourselves with compassion, kindness, humility, gentleness, and patience."
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB 4: LETTERS & JOURNAL -->
+    <div id="journal" class="page">
+        <div class="panel">
+            <h3>💌 Write an Encouragement Letter or Note</h3>
+            <form id="journal-form">
+                <div class="form-group" style="display:flex; gap:10px;">
+                    <input type="text" id="journal-author" placeholder="Your Name" style="flex:1;" required>
+                    <select id="journal-type" style="flex:1;">
+                        <option value="Open Encouragement 💌">Open Encouragement 💌</option>
+                        <option value="Gratitude Note 🌟">Gratitude Note 🌟</option>
+                        <option value="Private Reflection 🔒">Private Reflection 🔒</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <textarea id="journal-text" rows="3" placeholder="Write your letter or reflection here..." required></textarea>
+                </div>
+                <button type="submit" class="btn-submit">Post Entry</button>
+            </form>
+        </div>
+
+        <h3>📖 Recent Letters & Notes</h3>
+        <div id="journal-feed"></div>
+    </div>
+
+    <!-- TAB 5: UNDERSTANDING US (Cheat Sheet) -->
+    <div id="cheatsheet" class="page">
+        <div class="panel">
+            <h3>💡 Love Languages & Stress Blueprint</h3>
+            <p style="font-size:0.85rem; color:#666;">Use this living reference sheet to better understand how to love each other when stressed or tired.</p>
+            
+            <form id="blueprint-form">
+                <div class="form-group">
+                    <label>Name:</label>
+                    <input type="text" id="bp-name" placeholder="Your Name" required>
+                </div>
+                <div class="form-group">
+                    <label>Primary Love Language:</label>
+                    <input type="text" id="bp-love" placeholder="e.g. Quality Time, Words of Affirmation">
+                </div>
+                <div class="form-group">
+                    <label>When I'm feeling stressed, the best way to help me is...</label>
+                    <input type="text" id="bp-stress" placeholder="e.g. Give me 15 mins of quiet, or give me a hug">
+                </div>
+                <button type="submit" class="btn-submit">Save Blueprint</button>
+            </form>
+        </div>
+
+        <h3>👥 Our Saved Connection Blueprints</h3>
+        <div id="blueprint-list"></div>
+    </div>
+</div>
+
+<script>
+    // State Architecture
+    let state = JSON.parse(localStorage.getItem('twoAsOneData')) || {
+        p1Checked: false,
+        p2Checked: false,
+        streak: 0,
+        prayerTarget: '',
+        peaceEntries: [],
+        journalEntries: [],
+        blueprints: []
+    };
+
+    const dateIdeas = {
+        cozy: [
+            { title: "🎬 The Movie Critic Night", desc: "Pick a film neither of you has seen, make homemade popcorn, and write a funny joint review after." },
+            { title: "🧩 Board Game & Dessert", desc: "Clear the table, grab a favorite board or card game, and bake or order a quick sweet treat." },
+            { title: "🕯️ Porch Talks & Prayer", desc: "Turn off all phone notifications, sit outside with tea/coffee, and talk with zero screen distractions." }
+        ],
+        adventure: [
+            { title: "🌅 Sunset Drive & Dessert", desc: "Drive to a scenic spot nearby right before sunset and grab dessert on the way back." },
+            { title: "🛒 The $10 Grocery Challenge", desc: "Go to the grocery store, give each other $10 and 10 minutes to buy surprise snacks for each other!" },
+            { title: "🍦 New Ice Cream Hunt", desc: "Find a local ice cream or coffee shop you've never tried before and order something new." }
+        ],
+        quick: [
+            { title: "☕ 15-Minute Morning Coffee Date", desc: "Sit together for 15 solid minutes before starting the day—no phone scrolling allowed!" },
+            { title: "🎵 Song Exchange", desc: "Play 3 songs for each other that reminded you of each other or cheered you up this week." },
+            { title: "🙏 3-Minute Sunset Prayer", desc: "Pause together at the end of the day, hold hands, and speak 1 thing you're grateful for." }
+        ]
+    };
+
+    function saveState() {
+        localStorage.setItem('twoAsOneData', JSON.stringify(state));
+        updateUI();
+    }
+
+    function switchTab(tabId) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById(tabId).classList.add('active');
+        if(window.event) window.event.currentTarget.classList.add('active');
+    }
+
+    // Check-in & Streak System
+    function toggleCheckin(partner) {
+        if (partner === 'p1') state.p1Checked = !state.p1Checked;
+        if (partner === 'p2') state.p2Checked = !state.p2Checked;
+
+        if (state.p1Checked && state.p2Checked) {
+            state.streak += 1;
+            alert("🎉 Both partners checked in! Connection streak leveled up!");
+        }
+
+        saveState();
+    }
+
+    function savePrayerTarget() {
+        state.prayerTarget = document.getElementById('prayer-target-input').value;
+        saveState();
+    }
+
+    function generateDateIdea() {
+        const cat = document.getElementById('date-category').value;
+        const list = dateIdeas[cat];
+        const randomIdea = list[Math.floor(Math.random() * list.length)];
+        
+        document.getElementById('date-title').innerText = randomIdea.title;
+        document.getElementById('date-desc').innerText = randomIdea.desc;
+        document.getElementById('date-display').style.display = 'block';
+    }
+
+    // Peace Form Submission
+    document.getElementById('peace-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const entry = {
+            date: new Date().toLocaleDateString() + " " + new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}),
+            author: document.getElementById('peace-author').value,
+            perspective: document.getElementById('peace-perspective').value,
+            feeling: document.getElementById('peace-feeling').value,
+            need: document.getElementById('peace-need').value
+        };
+        state.peaceEntries.unshift(entry);
+        saveState();
+        this.reset();
+    });
+
+    // Journal Form Submission
+    document.getElementById('journal-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const entry = {
+            date: new Date().toLocaleDateString(),
+            author: document.getElementById('journal-author').value,
+            type: document.getElementById('journal-type').value,
+            text: document.getElementById('journal-text').value
+        };
+        state.journalEntries.unshift(entry);
+        saveState();
+        this.reset();
+    });
+
+    // Blueprint Form Submission
+    document.getElementById('blueprint-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const bp = {
+            name: document.getElementById('bp-name').value,
+            love: document.getElementById('bp-love').value,
+            stress: document.getElementById('bp-stress').value
+        };
+        
+        const existingIdx = state.blueprints.findIndex(b => b.name.toLowerCase() === bp.name.toLowerCase());
+        if (existingIdx >= 0) state.blueprints[existingIdx] = bp;
+        else state.blueprints.push(bp);
+
+        saveState();
+        this.reset();
+    });
+
+    // Render UI Elements
+    function updateUI() {
+        document.getElementById('streak-count').innerText = `${state.streak} Days`;
+        
+        const p1Btn = document.getElementById('btn-checkin-partner1');
+        const p2Btn = document.getElementById('btn-checkin-partner2');
+        
+        p1Btn.className = `checkin-btn ${state.p1Checked ? 'checked' : ''}`;
+        p1Btn.innerText = state.p1Checked ? "✅ Partner 1 Checked In" : "👤 Partner 1 Check-In";
+        
+        p2Btn.className = `checkin-btn ${state.p2Checked ? 'checked' : ''}`;
+        p2Btn.innerText = state.p2Checked ? "✅ Partner 2 Checked In" : "👤 Partner 2 Check-In";
+
+        document.getElementById('current-prayer-display').innerText = state.prayerTarget ? 
+            `" ${state.prayerTarget} "` : "No current focus logged. Add one above!";
+
+        // Peace Feed
+        const peaceFeed = document.getElementById('peace-feed');
+        peaceFeed.innerHTML = '';
+        if (state.peaceEntries.length === 0) {
+            peaceFeed.innerHTML = `<p style="color:#888; text-align:center;">No open peace entries. When you need to process feelings, submit a note above!</p>`;
+        } else {
+            state.peaceEntries.forEach(p => {
+                peaceFeed.innerHTML += `
+                    <div class="feed-item peace-card">
+                        <div class="feed-header">
+                            <span class="author-tag">🕊️ ${p.author}</span>
+                            <span>${p.date}</span>
+                        </div>
+                        <p style="margin:4px 0;"><strong>💙 Perspective:</strong> ${p.perspective}</p>
+                        <p style="margin:4px 0;"><strong>💔 Feeling:</strong> ${p.feeling}</p>
+                        <p style="margin:4px 0; color:var(--peace-green);"><strong>🙏 What I need:</strong> ${p.need}</p>
+                    </div>`;
+            });
+        }
+
+        // Journal Feed
+        const journalFeed = document.getElementById('journal-feed');
+        journalFeed.innerHTML = '';
+        if (state.journalEntries.length === 0) {
+            journalFeed.innerHTML = `<p style="color:#888; text-align:center;">No letters logged yet. Write an encouraging note above!</p>`;
+        } else {
+            state.journalEntries.forEach(j => {
+                journalFeed.innerHTML += `
+                    <div class="feed-item">
+                        <div class="feed-header">
+                            <span class="author-tag">${j.author} (${j.type})</span>
+                            <span>${j.date}</span>
+                        </div>
+                        <p style="margin:5px 0; line-height:1.4;">${j.text}</p>
+                    </div>`;
+            });
+        }
+
+        // Blueprints
+        const bpList = document.getElementById('blueprint-list');
+        bpList.innerHTML = '';
+        if (state.blueprints.length === 0) {
+            bpList.innerHTML = `<p style="color:#888; text-align:center;">No cheat sheets saved yet. Add your love languages above!</p>`;
+        } else {
+            state.blueprints.forEach(b => {
+                bpList.innerHTML += `
+                    <div class="feed-item" style="border-left: 4px solid var(--primary-ocean);">
+                        <h4 style="margin:0 0 5px 0; color:var(--primary-ocean);">${b.name}'s Connection Cheat Sheet</h4>
+                        <p style="margin:3px 0; font-size:0.9rem;"><strong>❤️ Love Language:</strong> ${b.love}</p>
+                        <p style="margin:3px 0; font-size:0.9rem;"><strong>🧘 When Stressed:</strong> ${b.stress}</p>
+                    </div>`;
+            });
+        }
+    }
+
+    // Initial Load
+    updateUI();
+</script>
+</body>
+</html>
