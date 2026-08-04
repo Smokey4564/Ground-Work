@@ -394,27 +394,66 @@
         </div>
     </div>
 
-    <!-- TAB 4: LETTERS & VAULT -->
+<!-- TAB 4: LETTERS & VAULT (ENHANCED GUIDED JOURNALING) -->
     <div id="journal" class="page">
         <div class="panel">
-            <h3>💌 Letters, Notes & Private Journal</h3>
+            <h3>💌 Letters, Notes & Guided Vault</h3>
+            <p style="font-size:0.85rem; color:#666; margin-bottom:15px;">
+                Express love, process tough days, or journal privately. Pick your vibe and mood to unlock targeted prompts!
+            </p>
+
             <form id="journal-form">
+                <!-- Entry Type Picker -->
                 <div class="form-group">
                     <label>Entry Type:</label>
-                    <select id="journal-type">
-                        <option value="Open Encouragement 💌">Open Encouragement 💌</option>
-                        <option value="Gratitude & Appreciation 🌟">Gratitude & Appreciation 🌟</option>
-                        <option value="Shout-Out / Celebration 👏">Shout-Out / Celebration 👏</option>
-                        <option value="Gentle Growth Reflection 🪞">Gentle Growth Reflection 🪞 ("Something to reflect on")</option>
-                        <option value="Private Journal Entry 🔒">Private Journal Entry 🔒 (Visible to author only)</option>
+                    <select id="journal-type" onchange="onJournalTypeOrMoodChange()">
+                        <option value="Private Journal Entry 🔒">Private Journal Entry 🔒 (Visible to you only)</option>
+                        <option value="Open Encouragement 💌">Open Encouragement 💌 (Shared love note)</option>
+                        <option value="Gratitude & Appreciation 🌟">Gratitude & Appreciation 🌟 (Thanking your partner)</option>
+                        <option value="Shout-Out / Celebration 👏">Shout-Out / Celebration 👏 (Celebrating a win)</option>
+                        <option value="Gentle Growth Reflection 🪞">Gentle Growth Reflection 🪞 ("Something for us to reflect on")</option>
                     </select>
                 </div>
+
+                <!-- Mood Selector Bar -->
                 <div class="form-group">
-                    <textarea id="journal-text" rows="3" placeholder="Write your letter, reflection, or note here..." required></textarea>
+                    <label>Current Mood / Vibe:</label>
+                    <div style="display:flex; gap:8px; overflow-x:auto; padding-bottom:5px;">
+                        <select id="journal-mood" onchange="onJournalTypeOrMoodChange()" style="font-weight:bold;">
+                            <option value="exhausted">😮‍💨 Exhausted / Work Drain</option>
+                            <option value="anxious">😟 Anxious / Overwhelmed</option>
+                            <option value="hurt">💔 Hurt / Misunderstood</option>
+                            <option value="grateful">🌟 Grateful / Loving</option>
+                            <option value="hopeful">🌱 Hopeful / Ready to Grow</option>
+                        </select>
+                    </div>
                 </div>
-                <button type="submit" class="btn-submit">Post Entry</button>
+
+                <!-- Guided Prompt Card -->
+                <div class="content-box" style="background:#eef6f8; border-color:#bce0fd; margin-bottom:15px; position:relative;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                        <span id="prompt-badge" class="pill-badge" style="background:#1b4965; color:white;">💡 Writing Helper</span>
+                        <button type="button" onclick="shufflePrompt()" style="background:none; border:none; color:#1b4965; font-size:0.8rem; font-weight:bold; cursor:pointer; text-decoration:underline;">
+                            🎲 New Prompt
+                        </button>
+                    </div>
+                    <p id="prompt-text" style="margin:0; font-style:italic; font-weight:500; color:#1b4965; line-height:1.4;">
+                        Select your mood above to get tailored reflection prompts...
+                    </p>
+                </div>
+
+                <!-- Text Area -->
+                <div class="form-group">
+                    <textarea id="journal-text" rows="4" placeholder="Start typing here... You can answer the prompt above or write freely from the heart." required></textarea>
+                </div>
+
+                <button type="submit" class="btn-submit">Save Entry to Vault</button>
             </form>
         </div>
+
+        <h3>📖 Recent Letters & Vault Entries</h3>
+        <div id="journal-feed"></div>
+    </div>
 
         <h3>📖 Recent Letters & Journal Entries</h3>
         <div id="journal-feed"></div>
