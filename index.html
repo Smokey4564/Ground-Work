@@ -681,7 +681,76 @@
     function updateUI() {
         document.getElementById('user-selector').value = state.activeUser;
         document.getElementById('streak-count').innerText = `${state.streak} Days`;
+
+        // ==========================================
+    // 💌 GUIDED JOURNALING ENGINE (NEW)
+    // ==========================================
+    const promptLibrary = {
+        'exhausted': [
+            "What was the single moment today that drained your battery the most?",
+            "What is one small thing your partner can do (or not do) to help you decompress tonight?",
+            "If you could hand off one stressor right now to God, what would it be?",
+            "What does your mind or body need most in this exact moment?"
+        ],
+        'anxious': [
+            "What worst-case scenario is your brain playing, and what is the actual, realistic truth?",
+            "What is 1 promise from scripture or reassurance from your partner you can anchor onto right now?",
+            "Name 3 simple physical things you can see or feel right now to ground yourself.",
+            "What is 1 thing within your control today, and what is 1 thing you need to let go of?"
+        ],
+        'hurt': [
+            "What specific word or action triggered this hurt feeling?",
+            "If you could express your heart without fear of conflict, what would you say?",
+            "What reassurance do you need to feel safe and connected again?",
+            "What intent do you believe your partner had versus the impact it caused?"
+        ],
+        'grateful': [
+            "What went unexpectedly well today that brought a smile to your face?",
+            "What is a small, quiet gesture your partner did recently that you noticed and appreciated?",
+            "How has God shown His goodness to your relationship this week?",
+            "What is 1 thing about your partner's character you love most right now?"
+        ],
+        'hopeful': [
+            "What is 1 area of your life or relationship you feel excited to nurture next?",
+            "What is a small win from today that proves you are both moving forward?",
+            "What step can you take tomorrow to make the day 10% smoother?"
+        ]
+    };
+
+    let currentPromptIndex = 0;
+
+    function onJournalTypeOrMoodChange() {
+        const mood = document.getElementById('journal-mood').value;
+        const type = document.getElementById('journal-type').value;
+        currentPromptIndex = 0;
         
+        const prompts = promptLibrary[mood] || promptLibrary['exhausted'];
+        document.getElementById('prompt-text').innerText = `"${prompts[0]}"`;
+        
+        const textarea = document.getElementById('journal-text');
+        if (type.includes('Private')) {
+            textarea.placeholder = "This note is private to you. Pour out your honest, unfiltered thoughts here...";
+        } else if (type.includes('Encouragement') || type.includes('Gratitude')) {
+            textarea.placeholder = "Write a sweet note for your partner to read when they open the app...";
+        } else {
+            textarea.placeholder = "Write freely here...";
+        }
+    }
+
+    function shufflePrompt() {
+        const mood = document.getElementById('journal-mood').value;
+        const prompts = promptLibrary[mood] || promptLibrary['exhausted'];
+        currentPromptIndex = (currentPromptIndex + 1) % prompts.length;
+        document.getElementById('prompt-text').innerText = `"${prompts[currentPromptIndex]}"`;
+    }
+
+    // ==========================================
+    // 🚀 INITIALIZATION
+    // ==========================================
+    renderStudyTopic();
+    onJournalTypeOrMoodChange(); // <--- Call this here so initial prompts load!
+    updateUI();
+    
         // Check-in Buttons
         const p1Btn = document.getElementById('btn-checkin-p1');
         const p2Btn = document.getElementById('btn-checkin-p2');
