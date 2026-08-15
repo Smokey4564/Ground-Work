@@ -10,22 +10,24 @@ const firebaseConfig = {
 };
 
 firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
 const db = firebase.firestore();
 
-// 💡 Enable automatic offline persistence & sync caching
-db.enablePersistence().catch((err) => {
-    if (err.code === 'failed-precondition') {
-        console.warn('Firestore persistence failed: Multiple tabs open');
-    } else if (err.code === 'unimplemented') {
-        console.warn('Firestore persistence not supported by browser');
-    }
+// Modern Firestore initialization with persistent local cache
+db.settings({
+    cacheSizeBytes: firebase.firestore.CACHE_SIZE_UNLIMITED
 });
 
-// Silent Background Login
-auth.signInAnonymously().catch(err => {
-    console.warn("Operating in offline mode:", err.message);
-});
+firebase.firestore().enablePersistence({ synchronizeTabs: true })
+    .catch((err) => {
+        if (err.code === 'failed-precondition') {
+            console.warn('Firestore persistence failed: Multiple tabs open');
+        } else if (err.code === 'unimplemented') {
+            console.warn('Firestore persistence not supported by browser');
+        }
+    });
+
+// Connect directly to live Firestore database listeners
+attachFirestoreListeners();
 
 auth.onAuthStateChanged(user => {
     if (user) {
