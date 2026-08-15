@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Two as One: Faith & Journey Companion</title>
     <link rel="stylesheet" href="styles.css">
+
+    <!-- Firebase SDKs (v10 via CDN) -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 </head>
 <body>
 
@@ -13,13 +18,32 @@
         <h1>🌊 Two as One</h1>
         <p>Our Shared Co-Op Journey, Faith & Connection</p>
         <div class="profile-bar">
-            <span>👤 Active User:</span>
+            <span>👤 Active Profile:</span>
             <select id="user-selector" onchange="changeUser()">
-                <option value="Partner A">Partner A</option>
+                <option value="Angel">Angel</option>
                 <option value="Brianna">Brianna</option>
             </select>
         </div>
     </header>
+
+    <!-- Firebase Auth Box -->
+    <div class="panel" id="auth-panel" style="background: #e0f2fe; border-color: #bce0fd;">
+        <div id="auth-logged-out">
+            <h4 style="margin-top:0; color: var(--primary-ocean);">🔐 Sign In for Live Device Sync</h4>
+            <div style="display:flex; gap:8px; margin-bottom:8px;">
+                <input type="email" id="auth-email" placeholder="Email" style="padding:8px;">
+                <input type="password" id="auth-password" placeholder="Password" style="padding:8px;">
+            </div>
+            <div style="display:flex; gap:8px;">
+                <button class="btn-submit" onclick="loginUser()" style="padding:8px;">Log In</button>
+                <button class="btn-submit btn-tan" onclick="registerUser()" style="padding:8px;">Sign Up</button>
+            </div>
+        </div>
+        <div id="auth-logged-in" style="display:none; justify-content:space-between; align-items:center;">
+            <span>🟢 Connected to Live Cloud (<strong id="cloud-user-email"></strong>)</span>
+            <button onclick="logoutUser()" style="background:none; border:none; color:var(--gold-accent); font-weight:bold; cursor:pointer; text-decoration:underline;">Sign Out</button>
+        </div>
+    </div>
 
     <div class="nav-tabs">
         <button class="tab-btn active" onclick="switchTab(event, 'hearth')">📖 The Hearth</button>
@@ -42,7 +66,7 @@
             
             <div class="checkin-grid">
                 <button class="checkin-btn" id="btn-checkin-p1" onclick="toggleCheckin('p1')">
-                    👤 Partner A Check-In
+                    👤 Angel Check-In
                 </button>
                 <button class="checkin-btn" id="btn-checkin-p2" onclick="toggleCheckin('p2')">
                     👤 Brianna Check-In
@@ -169,7 +193,6 @@
             </p>
 
             <form id="journal-form">
-                <!-- Entry Type Picker -->
                 <div class="form-group">
                     <label>Entry Type:</label>
                     <select id="journal-type" onchange="onJournalTypeOrMoodChange()">
@@ -181,7 +204,6 @@
                     </select>
                 </div>
 
-                <!-- Mood Selector Bar -->
                 <div class="form-group">
                     <label>Current Mood / Vibe:</label>
                     <div style="display:flex; gap:8px; overflow-x:auto; padding-bottom:5px;">
@@ -195,7 +217,6 @@
                     </div>
                 </div>
 
-                <!-- Guided Prompt Card -->
                 <div class="content-box" style="background:#eef6f8; border-color:#bce0fd; margin-bottom:15px; position:relative;">
                     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
                         <span id="prompt-badge" class="pill-badge" style="background:#1b4965; color:white;">💡 Writing Helper</span>
@@ -208,7 +229,6 @@
                     </p>
                 </div>
 
-                <!-- Text Area -->
                 <div class="form-group">
                     <textarea id="journal-text" rows="4" placeholder="Start typing here... You can answer the prompt above or write freely from the heart." required></textarea>
                 </div>
