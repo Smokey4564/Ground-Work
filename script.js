@@ -1,6 +1,21 @@
-// Initial State Architecture
-let state = JSON.parse(localStorage.getItem('twoAsOneData_v2')) || {
-    activeUser: 'Partner A',
+// Initialize Firebase using embedded credentials
+const firebaseConfig = {
+  apiKey: "AIzaSyBSj8zGANLTUz7XvuQg3X58u_7hOwYe5l8",
+  authDomain: "two-as-one-7058f.firebaseapp.com",
+  projectId: "two-as-one-7058f",
+  storageBucket: "two-as-one-7058f.firebasestorage.app",
+  messagingSenderId: "886694345352",
+  appId: "1:886694345352:web:c4af329fc049f686af7d3d",
+  measurementId: "G-5EJF7Y2PS1"
+};
+
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.firestore();
+
+// Application State
+let state = {
+    activeUser: localStorage.getItem('twoAsOne_activeUser') || 'Angel',
     p1Checked: false,
     p2Checked: false,
     streak: 0,
@@ -10,6 +25,7 @@ let state = JSON.parse(localStorage.getItem('twoAsOneData_v2')) || {
     blueprints: {}
 };
 
+// Static Data Collections
 const hearthContent = {
     'guided-prayer': [
         { title: "2-Minute Peace & Union Prayer", desc: "Hold hands, take 3 deep breaths together, and pray: 'Lord, grant us quick ears to listen, soft hearts to forgive, and steady hands to serve each other today. Amen.'" },
@@ -96,14 +112,80 @@ const promptLibrary = {
 
 let currentPromptIndex = 0;
 
-function saveState() {
-    localStorage.setItem('twoAsOneData_v2', JSON.stringify(state));
-    updateUI();
+// Firebase Auth Listeners & Actions
+auth.onAuthStateChanged(user => {
+    if (user) {
+        document.getElementById('auth-logged-out').style.display = 'none';
+        document.getElementById('auth-logged-in').style.display = 'flex';
+        document.getElementById('cloud-user-email').innerText = user.email;
+        attachFirestoreListeners();
+    } else {
+        document.getElementById('auth-logged-out').style.display = 'block';
+        document.getElementById('auth-logged-in').style.display = 'none';
+    }
+});
+
+function loginUser() {
+    const e = document.getElementById('auth-email').value;
+    const p = document.getElementById('auth-password').value;
+    auth.signInWithEmailAndPassword(e, p).catch(err => alert("Login Error: " + err.message));
+}
+
+function registerUser() {
+    const e = document.getElementById('auth-email').value;
+    const p = document.getElementById('auth-password').value;
+    auth.createUserWithEmailAndPassword(e, p).catch(err => alert("Registration Error: " + err.message));
+}
+
+function logoutUser() {
+    auth.signOut();
+}
+
+// Live Real-Time Firestore Synchronization
+function attachFirestoreListeners() {
+    // 1. Sync Streak State
+    db.collection("appData").doc("streakDoc").onSnapshot(doc => {
+        if (doc.exists) {
+            const d = doc.data();
+            state.p1Checked = d.p1Checked || false;
+            state.p2Checked = d.p2Checked || false;
+            state.streak = d.streak || 0;
+            updateUI();
+        }
+    });
+
+    // 2. Sync Shared Prayers
+    db.collection("prayers").orderBy("createdAt", "desc").onSnapshot(snapshot => {
+        state.prayers = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        updateUI();
+    });
+
+    // 3. Sync Peace Table Entries
+    db.collection("peaceEntries").orderBy("createdAt", "desc").onSnapshot(snapshot => {
+        state.peaceEntries = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        updateUI();
+    });
+
+    // 4. Sync Journal Entries
+    db.collection("journalEntries").orderBy("createdAt", "desc").onSnapshot(snapshot => {
+        state.journalEntries = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        updateUI();
+    });
+
+    // 5. Sync Connection Blueprints
+    db.collection("blueprints").onSnapshot(snapshot => {
+        state.blueprints = {};
+        snapshot.docs.forEach(doc => {
+            state.blueprints[doc.id] = doc.data();
+        });
+        updateUI();
+    });
 }
 
 function changeUser() {
     state.activeUser = document.getElementById('user-selector').value;
-    saveState();
+    localStorage.setItem('twoAsOne_activeUser', state.activeUser);
+    updateUI();
 }
 
 function switchTab(e, tabId) {
@@ -119,21 +201,28 @@ function toggleCheckin(partner) {
 
     if (state.p1Checked && state.p2Checked) {
         state.streak += 1;
-        alert("🎉 Both partners checked in! Connection streak leveled up!");
+        alert("🎉 Both partners checked in! Streak leveled up!");
     }
-    saveState();
+
+    db.collection("appData").doc("streakDoc").set({
+        p1Checked: state.p1Checked,
+        p2Checked: state.p2Checked,
+        streak: state.streak
+    });
 }
 
 function savePrayerTarget() {
     const val = document.getElementById('prayer-target-input').value;
     if(!val) return;
-    state.prayers.unshift({
+
+    db.collection("prayers").add({
         text: val,
         author: state.activeUser,
-        date: new Date().toLocaleDateString()
+        date: new Date().toLocaleDateString(),
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
     });
+
     document.getElementById('prayer-target-input').value = '';
-    saveState();
 }
 
 function generateHearthContent() {
@@ -150,8 +239,7 @@ function generateHearthContent() {
 function generateDateIdea() {
     const cat = document.getElementById('date-category').value;
     const list = dateIdeas[cat];
-    const randomIdx = Math.floor(Math.random() * list.length);
-    const idea = list[randomIdx];
+    const idea = list[Math.floor(Math.random() * list.length)];
     
     document.getElementById('date-title').innerText = idea.title;
     document.getElementById('date-desc').innerText = idea.desc;
@@ -182,31 +270,29 @@ function shufflePrompt() {
     document.getElementById('prompt-text').innerText = prompts[currentPromptIndex];
 }
 
-// Event Listeners for Forms
+// Form Handlers
 document.getElementById('peace-form').addEventListener('submit', function(e) {
     e.preventDefault();
-    const entry = {
+    db.collection("peaceEntries").add({
         date: new Date().toLocaleDateString() + " " + new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}),
         author: state.activeUser,
         perspective: document.getElementById('peace-perspective').value,
         feeling: document.getElementById('peace-feeling').value,
-        need: document.getElementById('peace-need').value
-    };
-    state.peaceEntries.unshift(entry);
-    saveState();
+        need: document.getElementById('peace-need').value,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
     this.reset();
 });
 
 document.getElementById('journal-form').addEventListener('submit', function(e) {
     e.preventDefault();
-    const entry = {
+    db.collection("journalEntries").add({
         date: new Date().toLocaleDateString(),
         author: state.activeUser,
         type: document.getElementById('journal-type').value,
-        text: document.getElementById('journal-text').value
-    };
-    state.journalEntries.unshift(entry);
-    saveState();
+        text: document.getElementById('journal-text').value,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
     this.reset();
 });
 
@@ -219,17 +305,17 @@ document.getElementById('blueprint-form').addEventListener('submit', function(e)
         signal: document.getElementById('bp-signal').value,
         pickup: document.getElementById('bp-pickup').value
     };
-    state.blueprints[state.activeUser] = bp;
-    saveState();
+
+    db.collection("blueprints").doc(state.activeUser).set(bp);
     this.reset();
 });
 
-// Main UI Update & Render Function
+// Primary UI Render Engine
 function updateUI() {
     document.getElementById('user-selector').value = state.activeUser;
     document.getElementById('streak-count').innerText = `${state.streak} Days`;
 
-    // Checkin Buttons
+    // Check-in state
     const btnP1 = document.getElementById('btn-checkin-p1');
     const btnP2 = document.getElementById('btn-checkin-p2');
     btnP1.className = 'checkin-btn' + (state.p1Checked ? ' checked' : '');
@@ -250,7 +336,7 @@ function updateUI() {
         `;
     });
 
-    // Render Peace Feed
+    // Render Peace Table
     const peaceFeed = document.getElementById('peace-feed');
     peaceFeed.innerHTML = state.peaceEntries.length === 0 ? '<p style="font-size:0.85rem; color:#888;">The Peace Table is currently clear.</p>' : '';
     state.peaceEntries.forEach(p => {
@@ -267,7 +353,7 @@ function updateUI() {
         `;
     });
 
-    // Render Journal Feed (Filtering private entries for current user)
+    // Render Journal Entries (Filter out Private entries belonging to other profiles)
     const journalFeed = document.getElementById('journal-feed');
     journalFeed.innerHTML = '';
     const visibleJournal = state.journalEntries.filter(j => {
@@ -295,7 +381,7 @@ function updateUI() {
         });
     }
 
-    // Render Blueprints
+    // Render Connection Blueprints
     const bpList = document.getElementById('blueprint-list');
     bpList.innerHTML = '';
     const keys = Object.keys(state.blueprints);
