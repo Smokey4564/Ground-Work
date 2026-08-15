@@ -1,4 +1,4 @@
-// Initialize Firebase using embedded credentials
+// Initialize Firebase
 const firebaseConfig = {
   apiKey: "AIzaSyBSj8zGANLTUz7XvuQg3X58u_7hOwYe5l8",
   authDomain: "two-as-one-7058f.firebaseapp.com",
@@ -12,30 +12,12 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-// Modern Firestore initialization with persistent local cache
-db.settings({
-    cacheSizeBytes: firebase.firestore.CACHE_SIZE_UNLIMITED
+// Enable offline caching engine
+db.enablePersistence().catch((err) => {
+    console.warn("Offline persistence notice:", err.message);
 });
 
-firebase.firestore().enablePersistence({ synchronizeTabs: true })
-    .catch((err) => {
-        if (err.code === 'failed-precondition') {
-            console.warn('Firestore persistence failed: Multiple tabs open');
-        } else if (err.code === 'unimplemented') {
-            console.warn('Firestore persistence not supported by browser');
-        }
-    });
-
-// Connect directly to live Firestore database listeners
-attachFirestoreListeners();
-
-auth.onAuthStateChanged(user => {
-    if (user) {
-        attachFirestoreListeners();
-    }
-});
-
-// Application State
+// 1. APPLICATION STATE DEFINITION (Must be declared BEFORE listeners!)
 let state = {
     activeUser: localStorage.getItem('twoAsOne_activeUser') || 'Angel',
     p1Checked: false,
@@ -47,7 +29,7 @@ let state = {
     blueprints: {}
 };
 
-// Static Data Collections
+// 2. STATIC DATA COLLECTIONS
 const hearthContent = {
     'guided-prayer': [
         { title: "2-Minute Peace & Union Prayer", desc: "Hold hands, take 3 deep breaths together, and pray: 'Lord, grant us quick ears to listen, soft hearts to forgive, and steady hands to serve each other today. Amen.'" },
@@ -134,9 +116,9 @@ const promptLibrary = {
 
 let currentPromptIndex = 0;
 
-// Live Real-Time Firestore Synchronization
+// 3. FIRESTORE LISTENERS
 function attachFirestoreListeners() {
-    // 1. Sync Streak State
+    // Sync Streak State
     db.collection("appData").doc("streakDoc").onSnapshot(doc => {
         if (doc.exists) {
             const d = doc.data();
@@ -147,25 +129,25 @@ function attachFirestoreListeners() {
         }
     });
 
-    // 2. Sync Shared Prayers
+    // Sync Shared Prayers
     db.collection("prayers").orderBy("createdAt", "desc").onSnapshot(snapshot => {
         state.prayers = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         updateUI();
     });
 
-    // 3. Sync Peace Table Entries
+    // Sync Peace Table Entries
     db.collection("peaceEntries").orderBy("createdAt", "desc").onSnapshot(snapshot => {
         state.peaceEntries = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         updateUI();
     });
 
-    // 4. Sync Journal Entries
+    // Sync Journal Entries
     db.collection("journalEntries").orderBy("createdAt", "desc").onSnapshot(snapshot => {
         state.journalEntries = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         updateUI();
     });
 
-    // 5. Sync Connection Blueprints
+    // Sync Connection Blueprints
     db.collection("blueprints").onSnapshot(snapshot => {
         state.blueprints = {};
         snapshot.docs.forEach(doc => {
@@ -346,7 +328,7 @@ function updateUI() {
         `;
     });
 
-    // Render Journal Entries (Filter out Private entries belonging to other profiles)
+    // Render Journal Entries
     const journalFeed = document.getElementById('journal-feed');
     journalFeed.innerHTML = '';
     const visibleJournal = state.journalEntries.filter(j => {
@@ -397,9 +379,10 @@ function updateUI() {
     }
 }
 
-// Initial Boot Setup
+// Initial Boot Setup (Called AFTER all state and functions exist)
 document.addEventListener('DOMContentLoaded', () => {
     onJournalTypeOrMoodChange();
     renderStudyTopic();
+    attachFirestoreListeners();
     updateUI();
 });
