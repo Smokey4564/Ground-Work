@@ -26,25 +26,6 @@
         </div>
     </header>
 
-    <!-- Firebase Auth Box -->
-    <div class="panel" id="auth-panel" style="background: #e0f2fe; border-color: #bce0fd;">
-        <div id="auth-logged-out">
-            <h4 style="margin-top:0; color: var(--primary-ocean);">🔐 Sign In for Live Device Sync</h4>
-            <div style="display:flex; gap:8px; margin-bottom:8px;">
-                <input type="email" id="auth-email" placeholder="Email" style="padding:8px;">
-                <input type="password" id="auth-password" placeholder="Password" style="padding:8px;">
-            </div>
-            <div style="display:flex; gap:8px;">
-                <button class="btn-submit" onclick="loginUser()" style="padding:8px;">Log In</button>
-                <button class="btn-submit btn-tan" onclick="registerUser()" style="padding:8px;">Sign Up</button>
-            </div>
-        </div>
-        <div id="auth-logged-in" style="display:none; justify-content:space-between; align-items:center;">
-            <span>🟢 Connected to Live Cloud (<strong id="cloud-user-email"></strong>)</span>
-            <button onclick="logoutUser()" style="background:none; border:none; color:var(--gold-accent); font-weight:bold; cursor:pointer; text-decoration:underline;">Sign Out</button>
-        </div>
-    </div>
-
     <div class="nav-tabs">
         <button class="tab-btn active" onclick="switchTab(event, 'hearth')">📖 The Hearth</button>
         <button class="tab-btn peace-tab" onclick="switchTab(event, 'peace')">🕊️ Peace Table</button>
