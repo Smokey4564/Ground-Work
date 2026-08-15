@@ -13,6 +13,26 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
 
+// 💡 Enable automatic offline persistence & sync caching
+db.enablePersistence().catch((err) => {
+    if (err.code === 'failed-precondition') {
+        console.warn('Firestore persistence failed: Multiple tabs open');
+    } else if (err.code === 'unimplemented') {
+        console.warn('Firestore persistence not supported by browser');
+    }
+});
+
+// Silent Background Login
+auth.signInAnonymously().catch(err => {
+    console.warn("Operating in offline mode:", err.message);
+});
+
+auth.onAuthStateChanged(user => {
+    if (user) {
+        attachFirestoreListeners();
+    }
+});
+
 // Application State
 let state = {
     activeUser: localStorage.getItem('twoAsOne_activeUser') || 'Angel',
@@ -111,35 +131,6 @@ const promptLibrary = {
 };
 
 let currentPromptIndex = 0;
-
-// Firebase Auth Listeners & Actions
-auth.onAuthStateChanged(user => {
-    if (user) {
-        document.getElementById('auth-logged-out').style.display = 'none';
-        document.getElementById('auth-logged-in').style.display = 'flex';
-        document.getElementById('cloud-user-email').innerText = user.email;
-        attachFirestoreListeners();
-    } else {
-        document.getElementById('auth-logged-out').style.display = 'block';
-        document.getElementById('auth-logged-in').style.display = 'none';
-    }
-});
-
-function loginUser() {
-    const e = document.getElementById('auth-email').value;
-    const p = document.getElementById('auth-password').value;
-    auth.signInWithEmailAndPassword(e, p).catch(err => alert("Login Error: " + err.message));
-}
-
-function registerUser() {
-    const e = document.getElementById('auth-email').value;
-    const p = document.getElementById('auth-password').value;
-    auth.createUserWithEmailAndPassword(e, p).catch(err => alert("Registration Error: " + err.message));
-}
-
-function logoutUser() {
-    auth.signOut();
-}
 
 // Live Real-Time Firestore Synchronization
 function attachFirestoreListeners() {
